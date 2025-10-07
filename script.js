@@ -61,7 +61,14 @@ let score = 0;
 let gameInterval;
 let isGameRunning = false;
 
-// Theme Toggle Functionality
+// ============================================================
+// THEME TOGGLE FUNCTIONALITY
+// ============================================================
+// Manages theme switching between dark and light modes.
+// Uses localStorage to persist user preference across sessions.
+// CSS variables (defined in :root and .dark-theme) automatically
+// update all themed elements when the class toggles.
+
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 
@@ -78,15 +85,136 @@ themeToggle.addEventListener('click', () => {
     const theme = body.classList.contains('dark-theme') ? 'dark' : 'light';
     localStorage.setItem('theme', theme);
     
-    // Update canvas background color
+    // Update canvas background color based on theme
     updateCanvasColors();
     renderGame();
 });
 
+// Updates the canvas background color to match the current theme
 function updateCanvasColors() {
     const isDark = body.classList.contains('dark-theme');
     COLORS[0] = isDark ? "#1a1a1a" : "#ffffff";
 }
+
+// ============================================================
+// MOBILE NAVIGATION FUNCTIONALITY
+// ============================================================
+// Implements horizontal section navigation for mobile devices.
+// Logic:
+// 1. Detect viewport width < 768px via media query check
+// 2. Track current section index (0 = game, 1 = info)
+// 3. On button click, calculate new scroll position
+// 4. Use smooth scrolling to transition between sections
+// 5. Update indicator dots to show current section
+
+const contentWrapper = document.getElementById('contentWrapper');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const indicatorDots = document.querySelectorAll('.indicator-dot');
+
+let currentSection = 0;
+const totalSections = 2; // Game section and Info section
+
+// Check if we're on mobile viewport
+function isMobile() {
+    return window.innerWidth < 768;
+}
+
+// Update navigation button visibility based on current section
+function updateNavButtons() {
+    if (!isMobile()) return;
+    
+    // Hide prev button on first section
+    if (currentSection === 0) {
+        prevBtn.style.opacity = '0.3';
+        prevBtn.style.pointerEvents = 'none';
+    } else {
+        prevBtn.style.opacity = '1';
+        prevBtn.style.pointerEvents = 'auto';
+    }
+    
+    // Hide next button on last section
+    if (currentSection === totalSections - 1) {
+        nextBtn.style.opacity = '0.3';
+        nextBtn.style.pointerEvents = 'none';
+    } else {
+        nextBtn.style.opacity = '1';
+        nextBtn.style.pointerEvents = 'auto';
+    }
+    
+    // Update indicator dots
+    indicatorDots.forEach((dot, index) => {
+        if (index === currentSection) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+}
+
+// Navigate to specific section with smooth scroll
+function navigateToSection(sectionIndex) {
+    if (!isMobile()) return;
+    
+    currentSection = sectionIndex;
+    const sectionWidth = contentWrapper.offsetWidth;
+    const scrollPosition = sectionIndex * sectionWidth;
+    
+    // Smooth scroll to the target section
+    contentWrapper.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+    });
+    
+    updateNavButtons();
+}
+
+// Previous button click handler
+prevBtn.addEventListener('click', () => {
+    if (currentSection > 0) {
+        navigateToSection(currentSection - 1);
+    }
+});
+
+// Next button click handler
+nextBtn.addEventListener('click', () => {
+    if (currentSection < totalSections - 1) {
+        navigateToSection(currentSection + 1);
+    }
+});
+
+// Handle window resize - reset to first section and update buttons
+let resizeTimer;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        if (isMobile()) {
+            navigateToSection(0);
+        }
+        updateNavButtons();
+    }, 250);
+});
+
+// Optional: Detect manual scrolling and update current section
+contentWrapper.addEventListener('scroll', () => {
+    if (!isMobile()) return;
+    
+    const sectionWidth = contentWrapper.offsetWidth;
+    const scrollLeft = contentWrapper.scrollLeft;
+    const newSection = Math.round(scrollLeft / sectionWidth);
+    
+    if (newSection !== currentSection) {
+        currentSection = newSection;
+        updateNavButtons();
+    }
+});
+
+// Initialize navigation state
+updateNavButtons();
+
+// ============================================================
+// GAME FUNCTIONALITY
+// ============================================================
 
 // Restart Button Functionality
 const restartBtn = document.getElementById('restartBtn');

@@ -29,37 +29,61 @@
     </header>
 
     <main class="game-container">
-        <div class="game-area">
-            <canvas id="tetris" width="300" height="600"></canvas>
-        </div>
-        
-        <div class="info-panel">
-            <div class="score-container">
-                <h2>SCORE</h2>
-                <div class="score-display" id="scoreDisplay">0</div>
+        <div class="content-wrapper" id="contentWrapper">
+            <div class="game-section" data-section="game">
+                <div class="game-area">
+                    <canvas id="tetris" width="300" height="600"></canvas>
+                </div>
             </div>
             
-            <div class="controls-info">
-                <h3>CONTROLS</h3>
-                <div class="control-item">
-                    <span class="key">↑</span>
-                    <span>Rotate</span>
-                </div>
-                <div class="control-item">
-                    <span class="key">←</span>
-                    <span>Move Left</span>
-                </div>
-                <div class="control-item">
-                    <span class="key">→</span>
-                    <span>Move Right</span>
-                </div>
-                <div class="control-item">
-                    <span class="key">↓</span>
-                    <span>Move Down</span>
+            <div class="game-section" data-section="info">
+                <div class="info-panel">
+                    <div class="score-container">
+                        <h2>SCORE</h2>
+                        <div class="score-display" id="scoreDisplay">0</div>
+                    </div>
+                    
+                    <div class="controls-info">
+                        <h3>CONTROLS</h3>
+                        <div class="control-item">
+                            <span class="key">↑</span>
+                            <span>Rotate</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">←</span>
+                            <span>Move Left</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">→</span>
+                            <span>Move Right</span>
+                        </div>
+                        <div class="control-item">
+                            <span class="key">↓</span>
+                            <span>Move Down</span>
+                        </div>
+                    </div>
+
+                    <button id="restartBtn" class="restart-btn">RESTART GAME</button>
                 </div>
             </div>
+        </div>
 
-            <button id="restartBtn" class="restart-btn">RESTART GAME</button>
+        <!-- Mobile Navigation Buttons -->
+        <button class="mobile-nav-btn mobile-nav-prev" id="prevBtn" aria-label="Previous section">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button class="mobile-nav-btn mobile-nav-next" id="nextBtn" aria-label="Next section">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- Mobile Navigation Indicator -->
+        <div class="mobile-nav-indicator">
+            <span class="indicator-dot active"></span>
+            <span class="indicator-dot"></span>
         </div>
     </main>
 
