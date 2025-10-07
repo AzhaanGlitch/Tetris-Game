@@ -30,42 +30,44 @@
     </header>
 
     <main class="game-container">
-        <!-- Desktop Layout: Side-by-side game and info -->
-        <div class="content-wrapper desktop-layout" id="contentWrapper">
-            <div class="game-section" data-section="game">
-                <div class="game-area">
-                    <canvas id="tetris" width="300" height="600"></canvas>
+        <!-- Desktop Layout: Side-by-side game and info wrapped in main container -->
+        <div class="main-game-wrapper desktop-layout">
+            <div class="content-wrapper" id="contentWrapper">
+                <div class="game-section" data-section="game">
+                    <div class="game-area">
+                        <canvas id="tetris" width="300" height="600"></canvas>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="game-section" data-section="info">
-                <div class="info-panel">
-                    <div class="score-container">
-                        <h2>SCORE</h2>
-                        <div class="score-display" id="scoreDisplay">0</div>
-                    </div>
-                    
-                    <div class="controls-info">
-                        <h3>CONTROLS</h3>
-                        <div class="control-item">
-                            <span class="key">↑</span>
-                            <span>Rotate</span>
+                
+                <div class="game-section" data-section="info">
+                    <div class="info-panel">
+                        <div class="score-container">
+                            <h2>SCORE</h2>
+                            <div class="score-display" id="scoreDisplay">0</div>
                         </div>
-                        <div class="control-item">
-                            <span class="key">←</span>
-                            <span>Move Left</span>
+                        
+                        <div class="controls-info">
+                            <h3>CONTROLS</h3>
+                            <div class="control-item">
+                                <span class="key">↑</span>
+                                <span>Rotate</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">←</span>
+                                <span>Move Left</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">→</span>
+                                <span>Move Right</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">↓</span>
+                                <span>Move Down</span>
+                            </div>
                         </div>
-                        <div class="control-item">
-                            <span class="key">→</span>
-                            <span>Move Right</span>
-                        </div>
-                        <div class="control-item">
-                            <span class="key">↓</span>
-                            <span>Move Down</span>
-                        </div>
-                    </div>
 
-                    <button id="restartBtn" class="restart-btn">RESTART GAME</button>
+                        <button id="restartBtn" class="restart-btn">RESTART GAME</button>
+                    </div>
                 </div>
             </div>
         </div>
