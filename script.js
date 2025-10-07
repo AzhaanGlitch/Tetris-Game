@@ -1,5 +1,27 @@
-let canvas = document.querySelector("#tetris");
-let scoreDisplay = document.getElementById("scoreDisplay");
+// ============================================================
+// CANVAS AND DISPLAY SETUP
+// ============================================================
+// Detect if mobile view and select appropriate canvas
+function isMobileView() {
+    return window.innerWidth < 768;
+}
+
+// Get the appropriate canvas based on viewport
+function getCanvas() {
+    return isMobileView() ? 
+        document.querySelector("#tetrisMobile") : 
+        document.querySelector("#tetris");
+}
+
+// Get the appropriate score display based on viewport
+function getScoreDisplay() {
+    return isMobileView() ? 
+        document.getElementById("scoreDisplayMobile") : 
+        document.getElementById("scoreDisplay");
+}
+
+let canvas = getCanvas();
+let scoreDisplay = getScoreDisplay();
 let ctx = canvas.getContext("2d");
 ctx.scale(30, 30);
 
@@ -64,11 +86,6 @@ let isGameRunning = false;
 // ============================================================
 // THEME TOGGLE FUNCTIONALITY
 // ============================================================
-// Manages theme switching between dark and light modes.
-// Uses localStorage to persist user preference across sessions.
-// CSS variables (defined in :root and .dark-theme) automatically
-// update all themed elements when the class toggles.
-
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 
@@ -85,140 +102,108 @@ themeToggle.addEventListener('click', () => {
     const theme = body.classList.contains('dark-theme') ? 'dark' : 'light';
     localStorage.setItem('theme', theme);
     
-    // Update canvas background color based on theme
     updateCanvasColors();
     renderGame();
 });
 
-// Updates the canvas background color to match the current theme
 function updateCanvasColors() {
     const isDark = body.classList.contains('dark-theme');
     COLORS[0] = isDark ? "#1a1a1a" : "#ffffff";
 }
 
 // ============================================================
-// MOBILE NAVIGATION FUNCTIONALITY
+// RESPONSIVE CANVAS SWITCHING
 // ============================================================
-// Implements horizontal section navigation for mobile devices.
-// Logic:
-// 1. Detect viewport width < 768px via media query check
-// 2. Track current section index (0 = game, 1 = info)
-// 3. On button click, calculate new scroll position
-// 4. Use smooth scrolling to transition between sections
-// 5. Update indicator dots to show current section
-
-const contentWrapper = document.getElementById('contentWrapper');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
-const indicatorDots = document.querySelectorAll('.indicator-dot');
-
-let currentSection = 0;
-const totalSections = 2; // Game section and Info section
-
-// Check if we're on mobile viewport
-function isMobile() {
-    return window.innerWidth < 768;
+// Handle canvas switching on resize
+function switchCanvas() {
+    const newCanvas = getCanvas();
+    const newScoreDisplay = getScoreDisplay();
+    
+    // Only switch if canvas changed
+    if (newCanvas !== canvas) {
+        // Stop current game
+        clearInterval(gameInterval);
+        isGameRunning = false;
+        
+        // Switch to new canvas and score display
+        canvas = newCanvas;
+        scoreDisplay = newScoreDisplay;
+        ctx = canvas.getContext("2d");
+        ctx.scale(30, 30);
+        
+        // Update score display
+        updateScore();
+        
+        // Restart game on new canvas
+        restartGame();
+    }
 }
 
-// Update navigation button visibility based on current section
-function updateNavButtons() {
-    if (!isMobile()) return;
-    
-    // Hide prev button on first section
-    if (currentSection === 0) {
-        prevBtn.style.opacity = '0.3';
-        prevBtn.style.pointerEvents = 'none';
-    } else {
-        prevBtn.style.opacity = '1';
-        prevBtn.style.pointerEvents = 'auto';
-    }
-    
-    // Hide next button on last section
-    if (currentSection === totalSections - 1) {
-        nextBtn.style.opacity = '0.3';
-        nextBtn.style.pointerEvents = 'none';
-    } else {
-        nextBtn.style.opacity = '1';
-        nextBtn.style.pointerEvents = 'auto';
-    }
-    
-    // Update indicator dots
-    indicatorDots.forEach((dot, index) => {
-        if (index === currentSection) {
-            dot.classList.add('active');
-        } else {
-            dot.classList.remove('active');
-        }
-    });
-}
-
-// Navigate to specific section with smooth scroll
-function navigateToSection(sectionIndex) {
-    if (!isMobile()) return;
-    
-    currentSection = sectionIndex;
-    const sectionWidth = contentWrapper.offsetWidth;
-    const scrollPosition = sectionIndex * sectionWidth;
-    
-    // Smooth scroll to the target section
-    contentWrapper.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-    });
-    
-    updateNavButtons();
-}
-
-// Previous button click handler
-prevBtn.addEventListener('click', () => {
-    if (currentSection > 0) {
-        navigateToSection(currentSection - 1);
-    }
-});
-
-// Next button click handler
-nextBtn.addEventListener('click', () => {
-    if (currentSection < totalSections - 1) {
-        navigateToSection(currentSection + 1);
-    }
-});
-
-// Handle window resize - reset to first section and update buttons
+// Handle window resize with debouncing
 let resizeTimer;
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-        if (isMobile()) {
-            navigateToSection(0);
-        }
-        updateNavButtons();
+        switchCanvas();
     }, 250);
 });
 
-// Optional: Detect manual scrolling and update current section
-contentWrapper.addEventListener('scroll', () => {
-    if (!isMobile()) return;
-    
-    const sectionWidth = contentWrapper.offsetWidth;
-    const scrollLeft = contentWrapper.scrollLeft;
-    const newSection = Math.round(scrollLeft / sectionWidth);
-    
-    if (newSection !== currentSection) {
-        currentSection = newSection;
-        updateNavButtons();
-    }
-});
+// ============================================================
+// MOBILE CONTROLS FUNCTIONALITY
+// ============================================================
+const mobileLeftBtn = document.getElementById('mobileLeft');
+const mobileRightBtn = document.getElementById('mobileRight');
 
-// Initialize navigation state
-updateNavButtons();
+if (mobileLeftBtn) {
+    mobileLeftBtn.addEventListener('click', () => {
+        if (isGameRunning) {
+            moveLeft();
+        }
+    });
+}
+
+if (mobileRightBtn) {
+    mobileRightBtn.addEventListener('click', () => {
+        if (isGameRunning) {
+            moveRight();
+        }
+    });
+}
+
+// Touch events for better mobile responsiveness
+if (mobileLeftBtn) {
+    mobileLeftBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (isGameRunning) {
+            moveLeft();
+        }
+    });
+}
+
+if (mobileRightBtn) {
+    mobileRightBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (isGameRunning) {
+            moveRight();
+        }
+    });
+}
 
 // ============================================================
 // GAME FUNCTIONALITY
 // ============================================================
 
-// Restart Button Functionality
+// Restart Button Functionality - Handle both desktop and mobile buttons
 const restartBtn = document.getElementById('restartBtn');
-restartBtn.addEventListener('click', restartGame);
+const restartBtnMobile = document.getElementById('restartBtnMobile');
+
+if (restartBtn) {
+    restartBtn.addEventListener('click', restartGame);
+}
+
+if (restartBtnMobile) {
+    restartBtnMobile.addEventListener('click', restartGame);
+}
 
 function restartGame() {
     clearInterval(gameInterval);
@@ -274,6 +259,7 @@ function checkGrid() {
 }
 
 function updateScore() {
+    scoreDisplay = getScoreDisplay();
     scoreDisplay.innerHTML = score;
 }
 
@@ -409,6 +395,9 @@ function renderGame() {
     }
 }
 
+// ============================================================
+// KEYBOARD CONTROLS
+// ============================================================
 document.addEventListener("keydown", function (e) {
     if (!isGameRunning) return;
     
@@ -424,6 +413,56 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-// Initialize canvas colors and start game
+// ============================================================
+// TOUCH SWIPE CONTROLS FOR MOBILE
+// ============================================================
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+canvas.addEventListener('touchstart', (e) => {
+    if (!isGameRunning || !isMobileView()) return;
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+}, false);
+
+canvas.addEventListener('touchend', (e) => {
+    if (!isGameRunning || !isMobileView()) return;
+    touchEndX = e.changedTouches[0].screenX;
+    touchEndY = e.changedTouches[0].screenY;
+    handleSwipe();
+}, false);
+
+function handleSwipe() {
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    const minSwipeDistance = 30;
+    
+    // Determine if swipe is more horizontal or vertical
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        if (Math.abs(deltaX) > minSwipeDistance) {
+            if (deltaX > 0) {
+                moveRight();
+            } else {
+                moveLeft();
+            }
+        }
+    } else {
+        // Vertical swipe
+        if (Math.abs(deltaY) > minSwipeDistance) {
+            if (deltaY > 0) {
+                moveDown();
+            } else {
+                rotate();
+            }
+        }
+    }
+}
+
+// ============================================================
+// INITIALIZE GAME
+// ============================================================
 updateCanvasColors();
 startGame();

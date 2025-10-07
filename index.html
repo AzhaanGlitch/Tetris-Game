@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris Game</title>
+    <title>Retro: Tetris Game</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body class="dark-theme">
     <header>
-        <h1>RETRO</h1>
+        <h1>RETRO: TETRIS GAME</h1>
         <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
             <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5"></circle>
@@ -29,7 +30,8 @@
     </header>
 
     <main class="game-container">
-        <div class="content-wrapper" id="contentWrapper">
+        <!-- Desktop Layout: Side-by-side game and info -->
+        <div class="content-wrapper desktop-layout" id="contentWrapper">
             <div class="game-section" data-section="game">
                 <div class="game-area">
                     <canvas id="tetris" width="300" height="600"></canvas>
@@ -68,22 +70,31 @@
             </div>
         </div>
 
-        <!-- Mobile Navigation Buttons -->
-        <button class="mobile-nav-btn mobile-nav-prev" id="prevBtn" aria-label="Previous section">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
-        <button class="mobile-nav-btn mobile-nav-next" id="nextBtn" aria-label="Next section">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-        </button>
+        <!-- Mobile Layout: Single column with score, game, and controls -->
+        <div class="mobile-layout">
+            <div class="score-container">
+                <h2>SCORE</h2>
+                <div class="score-display" id="scoreDisplayMobile">0</div>
+            </div>
+            
+            <div class="game-area-mobile">
+                <canvas id="tetrisMobile" width="300" height="600"></canvas>
+            </div>
 
-        <!-- Mobile Navigation Indicator -->
-        <div class="mobile-nav-indicator">
-            <span class="indicator-dot active"></span>
-            <span class="indicator-dot"></span>
+            <div class="mobile-controls">
+                <button class="mobile-control-btn" id="mobileLeft" aria-label="Move left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+                <button class="mobile-control-btn" id="mobileRight" aria-label="Move right">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <button id="restartBtnMobile" class="restart-btn">RESTART GAME</button>
         </div>
     </main>
 

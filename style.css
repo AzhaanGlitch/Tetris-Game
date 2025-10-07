@@ -27,9 +27,9 @@ This approach enables instant color changes across all elements without JavaScri
     --secondary-bg: #1E1E1E;
     --text-primary: #ffffff;
     --text-secondary: #a0a0a0;
-    --accent-color: #6fbf73; /* Softer, muted green (#6fbf73) - more pleasant than bright green */
+    --accent-color: #6fbf73; /* Softer, muted green - more pleasant than bright green */
     --canvas-bg: #1a1a1a;
-    --shadow: rgba(111, 191, 115, 0.2);
+    --shadow: rgba(111, 191, 115, 0.15);
     --border: #333333;
     --hover-bg: #2a2a2a;
 }
@@ -69,7 +69,7 @@ header h1 {
     letter-spacing: 0.3rem;
     color: var(--accent-color);
     text-shadow: 0 0 20px var(--accent-color);
-    margin: 0; /* Ensures no extra spacing */
+    margin: 0;
 }
 
 .theme-toggle {
@@ -116,9 +116,8 @@ header h1 {
 }
 
 /* 
-Main Container Alignment:
-Using Flexbox with justify-content: center and align-items: center ensures
-the game container is perfectly centered both horizontally and vertically.
+Main Container - Centered on Desktop
+Fixed: Added proper centering with margin auto and flex centering
 */
 main {
     flex: 1;
@@ -127,29 +126,30 @@ main {
     align-items: center;
     padding: 2rem;
     position: relative;
+    width: 100%;
+    max-width: 100%;
 }
 
 /* 
-Game Container Alignment:
-The content wrapper uses Flexbox to center content horizontally.
-On desktop, gap creates even spacing between game and info sections.
+Desktop Layout - Visible on screens >= 768px
+Game Container perfectly centered horizontally
 */
 .game-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    max-width: 1200px;
     width: 100%;
+    max-width: 1200px;
+    margin: 0 auto; /* Ensures perfect horizontal centering */
     position: relative;
 }
 
-.content-wrapper {
+.desktop-layout {
     display: flex;
     gap: 3rem;
     align-items: center;
     justify-content: center;
     width: 100%;
-    transition: transform 0.3s ease;
 }
 
 .game-section {
@@ -159,39 +159,32 @@ On desktop, gap creates even spacing between game and info sections.
     align-items: center;
 }
 
-/* 
-Game Area Alignment:
-The game area uses margin: 0 auto as a fallback for horizontal centering.
-Flexbox is primary method, but margin ensures centering even without flex context.
-*/
 .game-area {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
-}
-
-#tetris {
-    background: var(--canvas-bg);
-    border: 3px solid var(--accent-color);
-    box-shadow: 0 0 30px var(--shadow), 0 0 60px var(--accent-color);
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto; /* Ensures canvas is centered within its container */
 }
 
 /* 
-Info Panel Alignment:
-Flexbox with flex-direction: column stacks elements vertically.
-Each child element is centered using align-items if needed.
+Canvas Styling - Reduced Glow Effect
+Fixed: Changed box-shadow to have lower opacity for subtler glow
 */
+#tetris {
+    background: var(--canvas-bg);
+    border: 3px solid var(--accent-color);
+    /* Reduced glow: lower opacity (0.15 instead of 0.3+) and smaller spread */
+    box-shadow: 0 0 15px rgba(111, 191, 115, 0.15), 
+                0 0 25px rgba(111, 191, 115, 0.1);
+    border-radius: 8px;
+    display: block;
+}
+
 .info-panel {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     min-width: 280px;
     max-width: 400px;
-    margin: 0 auto; /* Centers panel when it becomes full width on mobile */
 }
 
 .score-container {
@@ -200,7 +193,7 @@ Each child element is centered using align-items if needed.
     border-radius: 12px;
     border: 2px solid var(--border);
     box-shadow: 0 4px 20px var(--shadow);
-    text-align: center; /* Centers text content horizontally */
+    text-align: center;
 }
 
 .score-container h2 {
@@ -208,7 +201,7 @@ Each child element is centered using align-items if needed.
     font-weight: 700;
     letter-spacing: 0.2rem;
     color: var(--text-secondary);
-    margin: 0 0 1rem 0; /* Removes default margin, adds bottom spacing */
+    margin: 0 0 1rem 0;
 }
 
 .score-display {
@@ -217,7 +210,7 @@ Each child element is centered using align-items if needed.
     color: var(--accent-color);
     text-shadow: 0 0 20px var(--accent-color);
     line-height: 1;
-    margin: 0; /* Removes any default margin */
+    margin: 0;
 }
 
 .controls-info {
@@ -236,11 +229,6 @@ Each child element is centered using align-items if needed.
     margin: 0 0 1.5rem 0;
 }
 
-/* 
-Control Items Alignment:
-Flexbox with align-items: center vertically aligns the key button and text.
-gap provides consistent spacing between elements.
-*/
 .control-item {
     display: flex;
     align-items: center;
@@ -281,7 +269,6 @@ gap provides consistent spacing between elements.
     transition: all 0.3s ease;
     box-shadow: 0 4px 20px var(--accent-color);
     display: block;
-    margin: 0 auto; /* Centers button horizontally */
     width: 100%;
 }
 
@@ -295,78 +282,35 @@ gap provides consistent spacing between elements.
 }
 
 /* 
-Mobile Navigation Buttons:
-Hidden by default (display: none), only shown on mobile via media query.
-Position: fixed keeps them anchored to screen edges regardless of scroll.
-z-index: 50 ensures they appear above other content but below header.
+Mobile Layout - Hidden on Desktop, Shown on Mobile
+Fixed: Mobile layout completely hidden on screens >= 768px
 */
-.mobile-nav-btn {
-    display: none;
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--accent-color);
-    color: #ffffff;
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 50;
-    box-shadow: 0 4px 15px var(--accent-color);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.mobile-layout {
+    display: none; /* Hidden by default on desktop */
 }
 
-.mobile-nav-prev {
-    left: 10px;
-}
-
-.mobile-nav-next {
-    right: 10px;
-}
-
-.mobile-nav-btn:active {
-    transform: translateY(-50%) scale(0.95);
-}
-
-.mobile-nav-btn svg {
-    pointer-events: none;
-}
-
-/* Mobile Navigation Indicator Dots */
-.mobile-nav-indicator {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    gap: 10px;
-    z-index: 50;
-}
-
-.indicator-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--text-secondary);
-    transition: all 0.3s ease;
-}
-
-.indicator-dot.active {
-    background: var(--accent-color);
-    box-shadow: 0 0 10px var(--accent-color);
+#tetrisMobile {
+    display: none; /* Mobile canvas hidden on desktop */
 }
 
 /* 
-Tablet Responsiveness (768px - 1024px):
-At this breakpoint, we switch to vertical stacking using flex-direction: column.
-This ensures content remains centered and readable on medium screens.
+Mobile Controls - Hidden on Desktop
+Fixed: Ensures mobile control buttons don't appear on desktop
 */
-@media (max-width: 1024px) {
-    .content-wrapper {
+.mobile-controls {
+    display: none;
+}
+
+.mobile-control-btn {
+    display: none;
+}
+
+/* 
+Tablet Responsiveness (768px - 1024px)
+Maintains desktop layout but with adjusted spacing
+*/
+@media (max-width: 1024px) and (min-width: 768px) {
+    .desktop-layout {
         flex-direction: column;
         gap: 2rem;
     }
@@ -384,11 +328,9 @@ This ensures content remains centered and readable on medium screens.
 }
 
 /* 
-Mobile Responsiveness and Navigation (< 768px):
-Media query activates mobile-specific styles including:
-1. Horizontal scrolling disabled (overflow-x: hidden on content wrapper)
-2. Navigation buttons displayed (display: flex)
-3. Touch-friendly button sizes (min 44px for accessibility)
+Mobile Responsiveness (< 768px)
+Fixed: Complete mobile overhaul with single-column layout
+Order: Score → Game → Controls (Red buttons)
 */
 @media (max-width: 768px) {
     header {
@@ -406,62 +348,98 @@ Media query activates mobile-specific styles including:
     }
 
     main {
-        padding: 1.5rem 0;
-        overflow-x: hidden;
+        padding: 1.5rem 1rem;
     }
 
-    /* 
-    Mobile Content Wrapper:
-    overflow-x: hidden prevents horizontal scrolling of the page.
-    The wrapper itself becomes a horizontal scroll container via JavaScript.
-    Width: 100% ensures it takes full viewport width.
-    */
-    .content-wrapper {
-        flex-direction: row;
-        gap: 0;
-        overflow-x: hidden;
-        scroll-behavior: smooth;
-        width: 100%;
-        flex-wrap: nowrap;
-    }
-
-    .game-section {
-        min-width: 100%;
-        width: 100%;
-        padding: 0 1rem;
-        justify-content: center;
+    /* Hide desktop layout completely on mobile */
+    .desktop-layout {
+        display: none !important;
     }
 
     #tetris {
-        max-width: 300px;
+        display: none !important;
     }
 
-    .score-display {
-        font-size: 3rem;
-    }
-
-    .info-panel {
+    /* Show mobile layout */
+    .mobile-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         gap: 1.5rem;
-        padding: 0 1rem;
+        width: 100%;
+        max-width: 100%;
     }
 
-    .score-container,
-    .controls-info {
+    /* Mobile Score Container - Top of layout */
+    .mobile-layout .score-container {
+        width: 100%;
+        max-width: 350px;
         padding: 1.5rem;
     }
 
-    /* 
-    Mobile Navigation Display:
-    Changes display from none to flex, activating the buttons.
-    Touch target size is 50px (exceeds minimum 44px for accessibility).
-    Fixed positioning keeps buttons visible during section transitions.
-    */
-    .mobile-nav-btn {
-        display: flex;
+    .mobile-layout .score-display {
+        font-size: 3rem;
     }
 
-    .mobile-nav-indicator {
+    /* Mobile Game Area - Center of layout */
+    .game-area-mobile {
         display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    #tetrisMobile {
+        display: block;
+        background: var(--canvas-bg);
+        border: 3px solid var(--accent-color);
+        /* Reduced glow for mobile */
+        box-shadow: 0 0 15px rgba(111, 191, 115, 0.15), 
+                    0 0 25px rgba(111, 191, 115, 0.1);
+        border-radius: 8px;
+        max-width: 300px;
+        width: 100%;
+        height: auto;
+    }
+
+    /* Mobile Controls - Bottom of layout with RED buttons */
+    .mobile-controls {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .mobile-control-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #dc2626; /* RED color for mobile buttons */
+        color: #ffffff;
+        border: none;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s ease;
+    }
+
+    .mobile-control-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 10px rgba(220, 38, 38, 0.6);
+    }
+
+    .mobile-control-btn svg {
+        pointer-events: none;
+    }
+
+    /* Mobile Restart Button */
+    .mobile-layout .restart-btn {
+        width: 100%;
+        max-width: 350px;
+        padding: 1rem 2rem;
     }
 }
 
@@ -482,42 +460,35 @@ Media query activates mobile-specific styles including:
     }
 
     main {
-        padding: 1rem 0;
+        padding: 1rem;
     }
 
-    #tetris {
-        max-width: 280px;
+    .mobile-layout .score-container {
+        max-width: 100%;
+        padding: 1.25rem;
     }
 
-    .score-display {
+    .mobile-layout .score-display {
         font-size: 2.5rem;
     }
 
-    .control-item {
-        font-size: 0.85rem;
+    #tetrisMobile {
+        max-width: 280px;
     }
 
-    .key {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
+    .mobile-control-btn {
+        width: 60px;
+        height: 60px;
     }
 
-    .restart-btn {
+    .mobile-control-btn svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .mobile-layout .restart-btn {
+        max-width: 100%;
         padding: 0.875rem 1.5rem;
         font-size: 0.9rem;
-    }
-
-    .mobile-nav-btn {
-        width: 45px;
-        height: 45px;
-    }
-
-    .mobile-nav-prev {
-        left: 5px;
-    }
-
-    .mobile-nav-next {
-        right: 5px;
     }
 }
