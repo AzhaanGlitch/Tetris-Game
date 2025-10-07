@@ -1,0 +1,335 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-bg: #f5f5f5;
+    --secondary-bg: #ffffff;
+    --text-primary: #1E1E1E;
+    --text-secondary: #666666;
+    --accent-color: #00ff88;
+    --canvas-bg: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --border: #e0e0e0;
+    --hover-bg: #f0f0f0;
+}
+
+.dark-theme {
+    --primary-bg: #0a0a0a;
+    --secondary-bg: #1E1E1E;
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --accent-color: #00ff88;
+    --canvas-bg: #1a1a1a;
+    --shadow: rgba(0, 255, 136, 0.2);
+    --border: #333333;
+    --hover-bg: #2a2a2a;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--primary-bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+header {
+    background: var(--secondary-bg);
+    padding: 1.5rem 2rem;
+    box-shadow: 0 2px 10px var(--shadow);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.3rem;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.theme-toggle {
+    background: transparent;
+    border: 2px solid var(--border);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent-color);
+    background: var(--hover-bg);
+    transform: rotate(180deg);
+}
+
+.theme-toggle svg {
+    position: absolute;
+    transition: opacity 0.3s ease;
+}
+
+.sun-icon {
+    opacity: 0;
+    color: var(--accent-color);
+}
+
+.moon-icon {
+    opacity: 1;
+    color: var(--accent-color);
+}
+
+.dark-theme .sun-icon {
+    opacity: 1;
+}
+
+.dark-theme .moon-icon {
+    opacity: 0;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.game-container {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.game-area {
+    flex-shrink: 0;
+}
+
+#tetris {
+    background: var(--canvas-bg);
+    border: 3px solid var(--accent-color);
+    box-shadow: 0 0 30px var(--shadow), 0 0 60px rgba(0, 255, 136, 0.1);
+    border-radius: 8px;
+    display: block;
+}
+
+.info-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 280px;
+    max-width: 400px;
+}
+
+.score-container {
+    background: var(--secondary-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 20px var(--shadow);
+    text-align: center;
+}
+
+.score-container h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.score-display {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--accent-color);
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    line-height: 1;
+}
+
+.controls-info {
+    background: var(--secondary-bg);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    box-shadow: 0 4px 20px var(--shadow);
+}
+
+.controls-info h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.2rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.control-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.control-item:last-child {
+    margin-bottom: 0;
+}
+
+.key {
+    background: var(--primary-bg);
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    flex-shrink: 0;
+}
+
+.restart-btn {
+    background: var(--accent-color);
+    color: #000000;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 255, 136, 0.3);
+}
+
+.restart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(0, 255, 136, 0.5);
+}
+
+.restart-btn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 1024px) {
+    .game-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .info-panel {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    #tetris {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 1.5rem;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 0.2rem;
+    }
+
+    .theme-toggle {
+        width: 45px;
+        height: 45px;
+    }
+
+    main {
+        padding: 1.5rem 1rem;
+    }
+
+    .game-container {
+        gap: 1.5rem;
+    }
+
+    #tetris {
+        max-width: 300px;
+    }
+
+    .score-display {
+        font-size: 3rem;
+    }
+
+    .info-panel {
+        gap: 1.5rem;
+    }
+
+    .score-container,
+    .controls-info {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.2rem;
+        letter-spacing: 0.15rem;
+    }
+
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    main {
+        padding: 1rem 0.75rem;
+    }
+
+    #tetris {
+        max-width: 280px;
+    }
+
+    .score-display {
+        font-size: 2.5rem;
+    }
+
+    .control-item {
+        font-size: 0.85rem;
+    }
+
+    .key {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .restart-btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.9rem;
+    }
+}
