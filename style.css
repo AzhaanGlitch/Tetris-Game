@@ -20,6 +20,7 @@ This approach enables instant color changes across all elements without JavaScri
     --shadow: rgba(0, 0, 0, 0.1);
     --border: #e0e0e0;
     --hover-bg: #f0f0f0;
+    --wrapper-glow: rgba(255, 140, 66, 0.12); /* Dim glow for light theme */
 }
 
 .dark-theme {
@@ -32,6 +33,7 @@ This approach enables instant color changes across all elements without JavaScri
     --shadow: rgba(111, 191, 115, 0.15);
     --border: #333333;
     --hover-bg: #2a2a2a;
+    --wrapper-glow: rgba(111, 191, 115, 0.12); /* Dim glow for dark theme */
 }
 
 body {
@@ -131,20 +133,36 @@ main {
 }
 
 /* 
-Desktop Layout - Visible on screens >= 768px
-Game Container perfectly centered horizontally
+Game Container - Outer container for centering
 */
 .game-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto; /* Ensures perfect horizontal centering */
     position: relative;
 }
 
-.desktop-layout {
+/* 
+Main Game Wrapper - The large box that wraps all three elements
+This creates the unified container with dim glow effect
+*/
+.main-game-wrapper {
+    background: var(--secondary-bg);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem;
+    /* Dim glowing effect - subtle and pleasant */
+    box-shadow: 
+        0 0 20px var(--wrapper-glow),
+        0 0 40px var(--wrapper-glow),
+        0 4px 30px var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.content-wrapper {
     display: flex;
     gap: 3rem;
     align-items: center;
@@ -188,11 +206,11 @@ Fixed: Changed box-shadow to have lower opacity for subtler glow
 }
 
 .score-container {
-    background: var(--secondary-bg);
+    background: var(--primary-bg);
     padding: 2rem;
     border-radius: 12px;
     border: 2px solid var(--border);
-    box-shadow: 0 4px 20px var(--shadow);
+    box-shadow: 0 2px 15px var(--shadow);
     text-align: center;
 }
 
@@ -214,11 +232,11 @@ Fixed: Changed box-shadow to have lower opacity for subtler glow
 }
 
 .controls-info {
-    background: var(--secondary-bg);
+    background: var(--primary-bg);
     padding: 2rem;
     border-radius: 12px;
     border: 2px solid var(--border);
-    box-shadow: 0 4px 20px var(--shadow);
+    box-shadow: 0 2px 15px var(--shadow);
 }
 
 .controls-info h3 {
@@ -242,7 +260,7 @@ Fixed: Changed box-shadow to have lower opacity for subtler glow
 }
 
 .key {
-    background: var(--primary-bg);
+    background: var(--secondary-bg);
     border: 2px solid var(--border);
     border-radius: 6px;
     width: 40px;
@@ -310,7 +328,11 @@ Tablet Responsiveness (768px - 1024px)
 Maintains desktop layout but with adjusted spacing
 */
 @media (max-width: 1024px) and (min-width: 768px) {
-    .desktop-layout {
+    .main-game-wrapper {
+        padding: 2rem;
+    }
+
+    .content-wrapper {
         flex-direction: column;
         gap: 2rem;
     }
@@ -352,6 +374,10 @@ Order: Score → Game → Controls (Red buttons)
     }
 
     /* Hide desktop layout completely on mobile */
+    .main-game-wrapper {
+        display: none !important;
+    }
+
     .desktop-layout {
         display: none !important;
     }
@@ -375,6 +401,7 @@ Order: Score → Game → Controls (Red buttons)
         width: 100%;
         max-width: 350px;
         padding: 1.5rem;
+        background: var(--secondary-bg);
     }
 
     .mobile-layout .score-display {
